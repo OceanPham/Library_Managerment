@@ -9,9 +9,11 @@ import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentTransaction;
 
+import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
 import android.view.MenuItem;
 
+import com.example.quanlythuvien.database.DatabaseSingleton;
 import com.example.quanlythuvien.fragment.DoiMatKhauFragment;
 import com.example.quanlythuvien.fragment.DoiThongTinCaNhanFragment;
 import com.example.quanlythuvien.fragment.HomeFragment;
@@ -35,10 +37,14 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     private static final int FRAGMENT_DOITTCANHAN = 8;
     private int currentFragment = FRAGMENT_HOME;
     private DrawerLayout drawer;
+    public  static SQLiteDatabase sqLiteDatabase = null;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        sqLiteDatabase = openOrCreateDatabase("library_manager.db", MODE_PRIVATE, null);
+        // Khởi tạo singleton database
+        DatabaseSingleton.initialize(sqLiteDatabase);
 
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
