@@ -14,6 +14,7 @@ import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.os.Handler;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -75,6 +76,7 @@ public class LoaiSachFragment extends Fragment {
         });
         return view;
     }
+
     public  void showDialog(Integer ID){
 
         dialog = new Dialog(getContext());
@@ -130,10 +132,11 @@ public class LoaiSachFragment extends Fragment {
         btnXacNhanXoa.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                Integer flag = 0;
                 loaiSachDAO = new LoaiSachDAO(getContext());
                 Integer delete = loaiSachDAO.delete(ID);
                 if(delete==0){
-                    Toast.makeText(getContext(), "Kệ sách phải trống mới có thể xóa!", Toast.LENGTH_SHORT).show();
+                    flag =0;
                 }
                 else{
                     listLoaiSach.clear();
@@ -147,9 +150,14 @@ public class LoaiSachFragment extends Fragment {
                     }
                     cursor.close();
                     loaiSachAdapter.notifyDataSetChanged();
-                    Toast.makeText(getContext(), "Xóa kệ sách thành công!", Toast.LENGTH_SHORT).show();
+                    flag = 1;
                 }
                 dialog.dismiss();
+               if (flag ==1) {
+                    showDialogNotifi("Xóa kệ sách thành công!");
+                }else if(flag==0){
+                    showDialogNotiFail("Kệ sách phải trống mới có thể xóa!");
+                }
             }
         });
 
@@ -162,10 +170,20 @@ public class LoaiSachFragment extends Fragment {
         dialog.getWindow().setLayout(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
         dialog.getWindow().setBackgroundDrawable( ContextCompat.getDrawable(getContext(), R.drawable.custom_dialog));
         dialog.setCancelable(false);
+        SQLiteDatabase sqLiteDatabase = DatabaseSingleton.getDatabase();
+        Cursor cursor = sqLiteDatabase.rawQuery("SELECT TenTheLoai FROM TheLoaiSach WHERE MaTheLoai=?", new String[]{String.valueOf(ID)});
+        String currentName = "";
+        cursor.moveToFirst();
+        while (cursor.isAfterLast()==false){
+            currentName = cursor.getString(0);
+            cursor.moveToNext();
+        }
+        cursor.close();
 
         Button btnCancelSua = dialog.findViewById(R.id.btnCancelSua);
         Button btnXacNhanSua = dialog.findViewById(R.id.btnXacNhanSua);
         TextInputEditText txtTenMoiLoaiSach = dialog.findViewById(R.id.txtTenMoiLoaiSach);
+        txtTenMoiLoaiSach.setText(currentName+"");
         dialog.show();
         btnCancelSua.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -176,31 +194,47 @@ public class LoaiSachFragment extends Fragment {
         btnXacNhanSua.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                Integer flag = 0;
                 int masach;
-                LoaiSach loaiSach = new LoaiSach();
-                masach = ID;
-                loaiSach.setMaTheLoai(masach);
-                loaiSach.setTenTheLoai(txtTenMoiLoaiSach.getText().toString());
-                loaiSachDAO = new LoaiSachDAO(getContext());
-                long update = loaiSachDAO.update(loaiSach);
-                if(update==0){
-                    Toast.makeText(getContext(), "Sửa không thành công", Toast.LENGTH_SHORT).show();
-                }
-                else{
-                    listLoaiSach.clear();
-                    SQLiteDatabase sqLiteDatabase = DatabaseSingleton.getDatabase();
-                    Cursor cursor = sqLiteDatabase.rawQuery("SELECT * FROM TheLoaiSach", null);
-                    cursor.moveToFirst();
-                    while (!cursor.isAfterLast()) {
-                        loaiSach = new LoaiSach(cursor.getInt(0), cursor.getString(1));
-                        listLoaiSach.add(loaiSach);
-                        cursor.moveToNext();
+                String TenSuaLoaiSach = txtTenMoiLoaiSach.getText().toString();
+                if(TenSuaLoaiSach.trim().length()==0){
+                    flag = 0;
+                }else{
+                    LoaiSach loaiSach = new LoaiSach();
+                    masach = ID;
+                    loaiSach.setMaTheLoai(masach);
+                    loaiSach.setTenTheLoai(TenSuaLoaiSach);
+                    loaiSachDAO = new LoaiSachDAO(getContext());
+                    long update = loaiSachDAO.update(loaiSach);
+                    if(update==0){
+                        flag = 1;
                     }
-                    cursor.close();
-                    loaiSachAdapter.notifyDataSetChanged();
-                    Toast.makeText(getContext(), "Sửa kệ sách thành công!", Toast.LENGTH_SHORT).show();
+                    else{
+                        listLoaiSach.clear();
+                        SQLiteDatabase sqLiteDatabase = DatabaseSingleton.getDatabase();
+                        Cursor cursor = sqLiteDatabase.rawQuery("SELECT * FROM TheLoaiSach", null);
+                        cursor.moveToFirst();
+                        while (!cursor.isAfterLast()) {
+                            loaiSach = new LoaiSach(cursor.getInt(0), cursor.getString(1));
+                            listLoaiSach.add(loaiSach);
+                            cursor.moveToNext();
+                        }
+                        cursor.close();
+                        loaiSachAdapter.notifyDataSetChanged();
+                        flag = 2;
+                    }
                 }
+
+
                 dialog.dismiss();
+
+                if(flag==2){
+                    showDialogNotifi("Sửa kệ sách thành công!");
+                } else if (flag ==1) {
+                    showDialogNotiFail("Sửa không thành công");
+                }else if(flag==0){
+                    showDialogNotiFail("Tên kệ sách không được để trống");
+                }
             }
         });
 
@@ -224,33 +258,98 @@ public class LoaiSachFragment extends Fragment {
             }
         });
         btnXacNhanThem.setOnClickListener(new View.OnClickListener() {
+            Integer flag = 0;
             @Override
             public void onClick(View v) {
-                int masach;
-                LoaiSach loaiSach = new LoaiSach();
-                loaiSach.setTenTheLoai(txtTenMoiLoaiSach.getText().toString());
-                loaiSachDAO = new LoaiSachDAO(getContext());
-                long insert = loaiSachDAO.insert(loaiSach);
-                if(insert==0){
-                    Toast.makeText(getContext(), "Thêm không thành công", Toast.LENGTH_SHORT).show();
+                String TenLoaiSachMoi = txtTenMoiLoaiSach.getText().toString();
+                if(TenLoaiSachMoi.trim().length()==0){
+                    flag = 0;
                 }
                 else{
-                    listLoaiSach.clear();
-                    SQLiteDatabase sqLiteDatabase = DatabaseSingleton.getDatabase();
-                    Cursor cursor = sqLiteDatabase.rawQuery("SELECT * FROM TheLoaiSach", null);
-                    cursor.moveToFirst();
-                    while (!cursor.isAfterLast()) {
-                        loaiSach = new LoaiSach(cursor.getInt(0), cursor.getString(1));
-                        listLoaiSach.add(loaiSach);
-                        cursor.moveToNext();
+                    LoaiSach loaiSach = new LoaiSach();
+                    loaiSach.setTenTheLoai(TenLoaiSachMoi);
+                    loaiSachDAO = new LoaiSachDAO(getContext());
+                    long insert = loaiSachDAO.insert(loaiSach);
+                    if(insert==0){
+                        flag = 1;
                     }
-                    cursor.close();
-                    loaiSachAdapter.notifyDataSetChanged();
-                    Toast.makeText(getContext(), "Sửa kệ sách thành công!", Toast.LENGTH_SHORT).show();
+                    else{
+                        listLoaiSach.clear();
+                        SQLiteDatabase sqLiteDatabase = DatabaseSingleton.getDatabase();
+                        Cursor cursor = sqLiteDatabase.rawQuery("SELECT * FROM TheLoaiSach", null);
+                        cursor.moveToFirst();
+                        while (!cursor.isAfterLast()) {
+                            loaiSach = new LoaiSach(cursor.getInt(0), cursor.getString(1));
+                            listLoaiSach.add(loaiSach);
+                            cursor.moveToNext();
+                        }
+                        cursor.close();
+                        loaiSachAdapter.notifyDataSetChanged();
+                        flag = 2;
+                    }
                 }
                 dialog.dismiss();
+
+                if(flag==2){
+                    showDialogNotifi("Thêm kệ sách thành công!");
+                } else if (flag ==1) {
+                    showDialogNotiFail("Thêm không thành công");
+                }else if(flag==0){
+                    showDialogNotiFail("Tên kệ sách không được để trống");
+                }
             }
         });
 
     }
+
+    public  void showDialogNotifi(String notit){
+        dialog = new Dialog(getContext());
+        dialog.setContentView(R.layout.huy_dialog_success);
+        dialog.getWindow().setLayout(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+        dialog.getWindow().setBackgroundDrawable( ContextCompat.getDrawable(getContext(), R.drawable.custom_dialog));
+        dialog.setCancelable(true);
+        Button btnCancelNotit = dialog.findViewById(R.id.btnCancelNotit);
+        TextView txtnoti = dialog.findViewById(R.id.txtNotification);
+        txtnoti.setText(notit);
+        dialog.show();
+        Handler handler = new Handler();
+        handler.postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                dialog.dismiss();
+            }
+        }, 2000);
+        btnCancelNotit.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                dialog.dismiss();
+            }
+        });
+    }
+    public  void showDialogNotiFail(String notit ){
+        dialog = new Dialog(getContext());
+        dialog.setContentView(R.layout.huy_dialog_fail);
+        dialog.getWindow().setLayout(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+        dialog.getWindow().setBackgroundDrawable( ContextCompat.getDrawable(getContext(), R.drawable.custom_dialog));
+        dialog.setCancelable(true);
+        Button btnCancelFail = dialog.findViewById(R.id.btnCancelFail);
+        TextView txtFail = dialog.findViewById(R.id.txtFail);
+        txtFail.setText(notit);
+        dialog.show();
+        Handler handler = new Handler();
+        handler.postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                // Đóng dialog sau 2 giây
+                dialog.dismiss();
+            }
+        }, 2000);
+        btnCancelFail.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                dialog.dismiss();
+            }
+        });
+    }
+
 }

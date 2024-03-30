@@ -15,6 +15,8 @@ public class LoaiSachDAO {
     public LoaiSachDAO(Context context) {
         this.context = context;
     }
+
+
     public  long insert(LoaiSach loaiSach){
         ContentValues values = new ContentValues();
         values.put("TenTheLoai", loaiSach.getTenTheLoai());
