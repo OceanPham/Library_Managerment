@@ -18,6 +18,6 @@ public class DoiMatKhauFragment extends Fragment {
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         return inflater.inflate(R.layout.fragment_doi_mat_khau, container, false);
-        //code test
+        
     }
 }
