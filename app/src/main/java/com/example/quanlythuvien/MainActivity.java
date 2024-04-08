@@ -42,6 +42,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
         sqLiteDatabase = openOrCreateDatabase("library_manager.db", MODE_PRIVATE, null);
         // Khởi tạo singleton database
         DatabaseSingleton.initialize(sqLiteDatabase);
