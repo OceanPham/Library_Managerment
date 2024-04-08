@@ -1,17 +1,114 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
     tools:context=".fragment.DoiMatKhauFragment">
 
+    <ImageButton
+        android:id="@+id/imageButton"
+        android:layout_width="wrap_content"
+        android:layout_height="60dp"
+        android:src="@drawable/top_login" />
+
+    <ImageView
+        android:id="@+id/imageView9"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:layout_marginTop="10dp"
+        android:src="@drawable/changepassword" />
+
     <TextView
+        android:id="@+id/textView11"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:background="#47B3C5"
-        android:textSize="40dp"
-        android:textStyle="bold"
-        android:text="Đôỉ mật khẩu fragment" />
+        android:layout_height="wrap_content"
+        android:layout_marginTop="32dp"
+        android:text="ĐỔI MẬT KHẨU"
+        android:textAlignment="center"
+        android:textColor="#0C7ED8"
+        android:textSize="30dp"
+        android:textStyle="bold" />
+
+
+
+    <com.google.android.material.textfield.TextInputLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="12dp"
+        app:boxCornerRadiusTopStart="16dp"
+        app:boxCornerRadiusBottomEnd="16dp"
+        app:boxStrokeColor="#FF0000"
+        app:boxStrokeWidth="3dp">
+
+        <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/edtpassHienTai"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textColor="@color/black"
+            android:textSize="17dp"
+            android:hint="Mật khẩu hiện tại" />
+    </com.google.android.material.textfield.TextInputLayout>
+
+
+
+
+    <com.google.android.material.textfield.TextInputLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="12dp"
+        app:boxCornerRadiusTopStart="16dp"
+        app:boxCornerRadiusBottomEnd="16dp"
+        app:boxStrokeColor="#FF0000"
+        app:boxStrokeWidth="3dp">
+
+        <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/edtpassMoi1"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textColor="@color/black"
+            android:textSize="17dp"
+            android:hint="Mật khẩu mới" />
+    </com.google.android.material.textfield.TextInputLayout>
+
+    <com.google.android.material.textfield.TextInputLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="12dp"
+        app:boxCornerRadiusTopStart="16dp"
+        app:boxCornerRadiusBottomEnd="16dp"
+        app:boxStrokeColor="#FF0000"
+        app:boxStrokeWidth="3dp">
+
+        <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/edtpassMoi2"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textColor="@color/black"
+            android:textSize="17dp"
+            android:hint="Nhập lại mật khẩu mới" />
+    </com.google.android.material.textfield.TextInputLayout>
+
+    <Button
+        android:id="@+id/btnXacNhanDoiPass"
+        android:layout_width="180dp"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:layout_marginTop="10dp"
+        android:background="@drawable/background_btn"
+        android:text="XÁC NHẬN"
+        android:textColor="@color/white" />
+
+    <Button
+        android:id="@+id/btnThoatDoiMatKhau"
+        android:layout_width="180dp"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:layout_marginTop="10dp"
+        android:background="#1495CF"
+        android:textColor="@color/black"
+        android:text="QUAY LẠI" />
 
 </LinearLayout>
