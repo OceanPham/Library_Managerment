@@ -17,5 +17,6 @@ public class DoiThongTinCaNhanFragment extends Fragment {
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         return inflater.inflate(R.layout.fragment_doi_thong_tin_ca_nhan, container, false);
+        //test connect
     }
 }
