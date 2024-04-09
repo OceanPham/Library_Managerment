@@ -18,10 +18,12 @@ import com.example.quanlythuvien.fragment.HomeFragment;
 import com.example.quanlythuvien.fragment.QuanLyNXBFragment;
 import com.example.quanlythuvien.fragment.QuanLyTacGiaFragment;
 import com.example.quanlythuvien.fragment.QuyDinhFragment;
+import com.example.quanlythuvien.fragment.SachFragment;
 import com.example.quanlythuvien.fragment.ThongKeFragment;
 import com.example.quanlythuvien.fragment.VeUngDungFragment;
 import com.example.quanlythuvien.fragment.XemThongTinFragment;
 import com.google.android.material.navigation.NavigationView;
+import com.google.android.material.tabs.TabLayout;
 
 public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
     private static final int FRAGMENT_HOME = 0;
@@ -54,6 +56,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         setTitle("Z-Library");
         navigationView.getMenu().findItem(R.id.nav_Home).setChecked(true);
     }
+
 
     @Override
     public boolean onNavigationItemSelected(@NonNull MenuItem item) {
@@ -133,4 +136,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         transaction.replace(R.id.content_frame, fragment);
         transaction.commit();
     }
+
+
 }
