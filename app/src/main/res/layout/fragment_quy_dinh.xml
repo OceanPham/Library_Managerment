@@ -1,16 +1,36 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:layout_gravity="center"
+    android:background="@drawable/decor2"
+    android:orientation="vertical"
     tools:context=".fragment.QuyDinhFragment">
 
-    <TextView
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:background="#7347C5"
-        android:textSize="40dp"
-        android:textStyle="bold"
-        android:text="Quy Định fragment" />
 
-</FrameLayout>
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/btnAddQuyDinh"
+        android:layout_width="160dp"
+        android:layout_height="50dp"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentEnd="true"
+        android:layout_marginTop="15dp"
+        android:layout_marginEnd="28dp"
+        android:backgroundTint="#2FFF7B"
+        android:text="+  Thêm quy định"
+        android:textColor="#C63508"
+        android:textSize="14dp"
+        android:textStyle="bold"
+        app:cornerRadius="10dp"
+        app:strokeColor="#00B0FF"
+        app:strokeWidth="2dp" />
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/recycle_QuyDinh"
+        android:layout_width="match_parent"
+        android:layout_below="@id/btnAddQuyDinh"
+        android:layout_height="match_parent"
+        android:textAlignment="center" />
+</RelativeLayout>
