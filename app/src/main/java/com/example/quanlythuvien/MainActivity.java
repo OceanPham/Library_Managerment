@@ -46,6 +46,10 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         // Khởi tạo singleton database
         DatabaseSingleton.initialize(sqLiteDatabase);
 
+        sqLiteDatabase = openOrCreateDatabase("library_manager.db", MODE_PRIVATE, null);
+        // Khởi tạo singleton database
+        DatabaseSingleton.initialize(sqLiteDatabase);
+
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 

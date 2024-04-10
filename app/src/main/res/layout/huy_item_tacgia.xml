@@ -49,6 +49,7 @@
         <TextView
             android:id="@+id/txtSuaTacGia"
             android:layout_width="1dp"
+<<<<<<< HEAD
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:background="@drawable/baseline_edit_square_24" />
@@ -58,6 +59,18 @@
             android:layout_width="15dp"
             android:layout_marginStart="10dp"
             android:layout_height="25dp"
+=======
+            android:layout_height="15dp"
+            android:layout_weight="1"
+            android:background="@drawable/icedit_tacgia"
+             />
+
+        <TextView
+            android:id="@+id/txtXoaTacGia"
+            android:layout_width="13dp"
+            android:layout_marginStart="10dp"
+            android:layout_height="15dp"
+>>>>>>> f7658b4767392cd9712068f986426549c53c01ac
             android:layout_weight="1"
             android:background="@drawable/icbin_tacgia"
             />
