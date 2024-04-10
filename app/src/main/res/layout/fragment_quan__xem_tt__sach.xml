@@ -38,9 +38,9 @@
                 android:orientation="vertical">
 
                 <LinearLayout
-                    android:layout_marginTop="10dp"
-                    android:layout_width="match_parent"
+                    android:layout_width="63dp"
                     android:layout_height="wrap_content"
+                    android:layout_marginTop="10dp"
                     android:orientation="horizontal">
 
                     <ImageButton
@@ -50,16 +50,6 @@
                         android:layout_weight="1"
                         android:background="@android:color/transparent"
                         android:src="@drawable/quan_ic_quaylai_left_24" />
-
-                    <Button
-                        android:id="@+id/btnmuonsach"
-                        android:layout_width="263dp"
-                        android:layout_height="60dp"
-                        android:layout_gravity="right"
-                        android:layout_marginLeft="70dp"
-                        android:background="@drawable/quan_btn_huy_muon_sach"
-                        android:text="Mượn sách"
-                        app:backgroundTint="@null" />
                 </LinearLayout>
 
 

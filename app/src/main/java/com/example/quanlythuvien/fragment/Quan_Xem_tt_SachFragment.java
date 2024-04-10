@@ -35,7 +35,6 @@ import java.util.Date;
 public class Quan_Xem_tt_SachFragment extends Fragment {
     ImageView img;
     ImageButton btnquaylai, btnxoa,btnsua;
-    Button btnmuon;
     DAOMuonSach daoMuonSach;
     DAOSach daoSach;
     TextView txttensach, txttacgia, txttheloai, txttomtat, txtngayxb, txtnhaxb, txtslkho, txtslsachdangmuon, txtsosachcon;
@@ -110,19 +109,6 @@ public class Quan_Xem_tt_SachFragment extends Fragment {
             }
         });
 
-        btnmuon.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                if (sosachconlai > 0) {
-                    OpenFeedbackMuon(txttensach.getText().toString(),tentacgia,sosachconlai,nhan.getInt("soluong"));
-                }
-                else{
-                    showDialogNotiFail("Số lượng sách còn lại trong kho không đủ. Mong bạn thông cảm");
-                }
-            }
-        });
-
-
         return v;
     }
 
@@ -140,7 +126,6 @@ public class Quan_Xem_tt_SachFragment extends Fragment {
         WindowManager.LayoutParams windowattribute = win.getAttributes();
         windowattribute.gravity = Gravity.CENTER;
         win.setAttributes(windowattribute);
-        Button btnmuon = dialog.findViewById(R.id.btnmuonsach);
         Button btnhuy = dialog.findViewById(R.id.btnhuymuon);
         TextView txttens = dialog.findViewById(R.id.edttensachmuon);
         txttens.setText(ts);
@@ -160,41 +145,6 @@ public class Quan_Xem_tt_SachFragment extends Fragment {
             @Override
             public void onClick(View view) {
                 dialog.dismiss();
-            }
-        });
-        btnmuon.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                int soluongt = Integer.parseInt(sl.getText().toString());
-                if(soluongt<=0){
-                    showDialogNotiFail("Số lượng mượn không được nhỏ hơn 1");
-                }
-                else if(soluongt > sosachconlai){
-                    showDialogNotiFail("Số lượng không đủ cho bạn mượn");
-                }
-                else{
-                    int masach = Integer.parseInt(daoMuonSach.getmasach(txttens.getText().toString()));
-                    String ngaymuon= txtngaymuon.getText().toString();
-                    MuonSach obj = new MuonSach(
-                            3,
-                            masach,
-                            ngaymuon,
-                            "",
-                            "Chưa trả",
-                            0,
-                            soluongt
-                    );
-                    if(daoMuonSach.insert_muonsach(obj) > 0){
-                        showDialogNotiSuccess("Mượn sách thành công");
-                        dialog.dismiss();
-                        txtslsachdangmuon.setText("Số sách đang được mượn: "+daoMuonSach.getSoSachdangmuon(daoSach.getMaSach(txttensach.getText().toString())));
-                        int sosachconlai = soluong - daoMuonSach.getSoSachdangmuon(daoSach.getMaSach(txttensach.getText().toString()));
-                        txtsosachcon.setText("Số sách còn lại: "+sosachconlai);
-                    }
-                    else {
-                        showDialogNotiFail("Mượn sách thất bại. Vui lòng kiểm tra lại");
-                    }
-                }
             }
         });
     }
@@ -325,7 +275,6 @@ public class Quan_Xem_tt_SachFragment extends Fragment {
         btnquaylai = v.findViewById(R.id.btnquaylai);
         btnsua = v.findViewById(R.id.btnsuasach);
         btnxoa = v.findViewById(R.id.btnxoasach);
-        btnmuon = v.findViewById(R.id.btnmuonsach);
         daoMuonSach = new DAOMuonSach(v.getContext());
     }
 }
