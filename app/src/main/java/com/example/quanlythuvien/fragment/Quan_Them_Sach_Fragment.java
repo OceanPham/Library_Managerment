@@ -45,6 +45,7 @@ import com.google.android.material.tabs.TabLayout;
 
 import java.io.ByteArrayOutputStream;
 import java.io.FileNotFoundException;
+import java.io.IOException;
 import java.io.InputStream;
 import java.text.SimpleDateFormat;
 import java.time.LocalDate;
@@ -287,12 +288,11 @@ public class Quan_Them_Sach_Fragment extends Fragment {
         if(requestCode == REQUEST_CODE_FOLDER && resultCode == RESULT_OK && data != null){
             Uri uri = data.getData();
             try{
-                InputStream inputStream = requireContext().getContentResolver().openInputStream(uri);
-                Bitmap bitmap = BitmapFactory.decodeStream(inputStream);
-                imgthemsach.setImageBitmap(bitmap);
-            }
-            catch (FileNotFoundException e){
-                e.printStackTrace();
+                Bitmap bitmap = MediaStore.Images.Media.getBitmap(getActivity().getContentResolver(),uri);
+                Bitmap scaledBitmap = scaleBitmap(bitmap,800);
+                imgthemsach.setImageBitmap(scaledBitmap);
+            } catch (IOException e) {
+                throw new RuntimeException(e);
             }
 
         }
@@ -333,6 +333,21 @@ public class Quan_Them_Sach_Fragment extends Fragment {
         edtngayxb = k.findViewById(R.id.edtthemngayxb);
         btnthem = k.findViewById(R.id.btnthemthemsach);
         tacgia = k.findViewById(R.id.spinnertacgia);
+    }
+    private Bitmap scaleBitmap(Bitmap bitmap, int maxSize) {
+        int width = bitmap.getWidth();
+        int height = bitmap.getHeight();
+
+        float bitmapRatio = (float) width / (float) height;
+        if (bitmapRatio > 1) {
+            width = maxSize;
+            height = (int) (width / bitmapRatio);
+        } else {
+            height = maxSize;
+            width = (int) (height * bitmapRatio);
+        }
+
+        return Bitmap.createScaledBitmap(bitmap, width, height, true);
     }
 
 }
