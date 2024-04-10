@@ -77,13 +77,15 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 setTitle("Z-Library");
                 currentFragment = FRAGMENT_HOME;
             }
-        }else if(id == R.id.nav_XemThongTin){
-            if(currentFragment!=FRAGMENT_XEMTHONGTIN){
-                replaceFragment(new XemThongTinFragment());
-                setTitle("Xem thông tin chi tiết");
-                currentFragment = FRAGMENT_XEMTHONGTIN;
-            }
-        }else if(id == R.id.nav_ThongKe){
+        }
+//        else if(id == R.id.nav_XemThongTin){
+//            if(currentFragment!=FRAGMENT_XEMTHONGTIN){
+//                replaceFragment(new XemThongTinFragment());
+//                setTitle("Xem thông tin chi tiết");
+//                currentFragment = FRAGMENT_XEMTHONGTIN;
+//            }
+//        }
+        else if(id == R.id.nav_ThongKe){
             if(currentFragment!=FRAGMENT_THONGKE){
                 replaceFragment(new ThongKeFragment());
                 setTitle("Thống kê");

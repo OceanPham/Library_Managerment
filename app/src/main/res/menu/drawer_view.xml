@@ -6,11 +6,11 @@
             android:icon="@drawable/baseline_home_24"
             android:title="Home"
             />
-        <item
-            android:id="@+id/nav_XemThongTin"
-            android:icon="@drawable/baseline_remove_red_eye_24"
-            android:title="Xem thông tin chi tiết"
-            />
+<!--        <item-->
+<!--            android:id="@+id/nav_XemThongTin"-->
+<!--            android:icon="@drawable/baseline_remove_red_eye_24"-->
+<!--            android:title="Xem thông tin chi tiết"-->
+<!--            />-->
         <item
             android:id="@+id/nav_ThongKe"
             android:icon="@drawable/baseline_bar_chart_24"
