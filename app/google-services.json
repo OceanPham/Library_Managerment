@@ -1,0 +1,30 @@
+{
+  "project_info": {
+    "project_number": "1031247664642",
+    "firebase_url": "https://library-manager-team7-default-rtdb.firebaseio.com",
+    "project_id": "library-manager-team7",
+    "storage_bucket": "library-manager-team7.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:1031247664642:android:34c80ce7390759ca48791b",
+        "android_client_info": {
+          "package_name": "com.example.quanlythuvien"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBm8-441dKAs-VyHmNvs3rkyWToRtIeXEM"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
