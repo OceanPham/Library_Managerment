@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:paddingTop="10dp"
     android:paddingBottom="10dp"
+    android:paddingTop="10dp"
     android:background="#F7F6FE"
     android:layout_height="wrap_content"
     android:orientation="horizontal">
@@ -50,21 +50,22 @@
 
     <ImageButton
         android:id="@+id/btnsuanxb"
-        android:layout_width="25dp"
+        android:layout_width="20dp"
         android:scaleType="fitCenter"
-        android:layout_height="55dp"
+        android:layout_height="40dp"
         android:layout_gravity="center"
         android:layout_marginLeft="5dp"
         android:layout_marginRight="5dp"
         android:background="@android:color/transparent"
         android:layout_weight="1"
-        android:src="@drawable/quan_icedit_tacgia" />
+        android:src="@drawable/quan_icedit_tacgia"
+        />
 
     <ImageButton
         android:id="@+id/btnxoanxb"
-        android:layout_width="25dp"
+        android:layout_width="20dp"
         android:scaleType="fitCenter"
-        android:layout_height="55dp"
+        android:layout_height="40dp"
         android:background="@android:color/transparent"
         android:layout_gravity="center"
         android:layout_weight="1"

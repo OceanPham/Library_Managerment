@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
@@ -12,21 +13,20 @@
     <com.google.android.material.button.MaterialButton
         android:id="@+id/btnAddTacGia"
         android:layout_width="150dp"
-        android:layout_marginBottom="30dp"
-        android:layout_marginTop="35dp"
         android:layout_height="50dp"
-        android:text="+  Thêm tác giả"
-        android:textSize="14dp"
         android:layout_gravity="right"
+        android:layout_marginTop="35dp"
+        android:layout_marginEnd="30dp"
+        android:layout_marginBottom="30dp"
+        android:backgroundTint="#624DE3"
+        android:drawablePadding="20dp"
+        android:text="+  Thêm tác giả"
         android:textColor="#FAFBFB"
-        app:strokeWidth="2dp"
+        android:textSize="14dp"
         android:textStyle="bold"
         app:cornerRadius="10dp"
-        android:drawablePadding="20dp"
         app:strokeColor="#00B0FF"
-        android:backgroundTint="#624DE3"
-        android:layout_marginEnd="30dp"
-        />
+        app:strokeWidth="2dp" />
 
     <LinearLayout
         android:layout_width="match_parent"

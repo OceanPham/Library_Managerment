@@ -74,7 +74,7 @@
                     android:layout_gravity="center"
                     android:layout_height="match_parent"
                     android:scaleType="fitXY"
-                    android:background="@drawable/icedit_tacgia"
+                    android:background="@drawable/baseline_edit_square_24"
                     />
 
                 <ImageView

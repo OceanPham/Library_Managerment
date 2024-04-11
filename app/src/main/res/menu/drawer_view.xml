@@ -6,11 +6,7 @@
             android:icon="@drawable/baseline_home_24"
             android:title="Home"
             />
-<!--        <item-->
-<!--            android:id="@+id/nav_XemThongTin"-->
-<!--            android:icon="@drawable/baseline_remove_red_eye_24"-->
-<!--            android:title="Xem thông tin chi tiết"-->
-<!--            />-->
+
         <item
             android:id="@+id/nav_ThongKe"
             android:icon="@drawable/baseline_bar_chart_24"
@@ -50,8 +46,14 @@
                     android:icon="@drawable/baseline_switch_account_24"
                     android:title="Đổi thông tin tài khoản"
                     />
+                        <item
+                            android:id="@+id/nav_XemThongTinTraSach"
+                            android:icon="@drawable/baseline_remove_red_eye_24"
+                            android:title="Xem thông tin trả sách"
+                            />
+
                 <item
-                    android:id="@+id/DangXuat"
+                    android:id="@+id/nav_DangXuat"
                     android:icon="@drawable/baseline_logout_24"
                     android:title="Đăng xuất"
                     />

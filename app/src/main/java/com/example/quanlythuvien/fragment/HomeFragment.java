@@ -50,7 +50,7 @@ public class HomeFragment extends Fragment {
         // Thêm các fragment vào adapter
         adapter.addFragment(new LoaiSachFragment());
         adapter.addFragment(new SachFragment());
-//        adapter.addFragment(new MuonSachFragment());
+        adapter.addFragment(new MuonSachFragment());
 
         // Thiết lập adapter cho ViewPager
         viewPager.setAdapter(adapter);

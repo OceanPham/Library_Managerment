@@ -2,6 +2,7 @@ package com.example.quanlythuvien;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.ActionBarDrawerToggle;
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.core.view.GravityCompat;
@@ -9,23 +10,26 @@ import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentTransaction;
 
+import android.content.DialogInterface;
+import android.content.Intent;
+import android.content.IntentFilter;
 import android.database.sqlite.SQLiteDatabase;
+import android.os.BatteryManager;
 import android.os.Bundle;
 import android.view.MenuItem;
 
 import com.example.quanlythuvien.database.DatabaseSingleton;
+import com.example.quanlythuvien.fragment.DangXuatFragment;
 import com.example.quanlythuvien.fragment.DoiMatKhauFragment;
 import com.example.quanlythuvien.fragment.DoiThongTinCaNhanFragment;
 import com.example.quanlythuvien.fragment.HomeFragment;
 import com.example.quanlythuvien.fragment.QuanLyNXBFragment;
 import com.example.quanlythuvien.fragment.QuanLyTacGiaFragment;
 import com.example.quanlythuvien.fragment.QuyDinhFragment;
-import com.example.quanlythuvien.fragment.SachFragment;
 import com.example.quanlythuvien.fragment.ThongKeFragment;
 import com.example.quanlythuvien.fragment.VeUngDungFragment;
-import com.example.quanlythuvien.fragment.XemThongTinFragment;
+import com.example.quanlythuvien.fragment.XemThongTinTraSachFragment;
 import com.google.android.material.navigation.NavigationView;
-import com.google.android.material.tabs.TabLayout;
 
 public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
     private static final int FRAGMENT_HOME = 0;
@@ -37,6 +41,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     private static final int FRAGMENT_QUYDINH= 5;
     private static final int FRAGMENT_DOIMATKHAU = 7;
     private static final int FRAGMENT_DOITTCANHAN = 8;
+    private static final int FRAGMENT_DANGXUAT= 9;
     private int currentFragment = FRAGMENT_HOME;
     private DrawerLayout drawer;
     public  static SQLiteDatabase sqLiteDatabase = null;
@@ -65,9 +70,35 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         replaceFragment(new HomeFragment());
         setTitle("Z-Library");
         navigationView.getMenu().findItem(R.id.nav_Home).setChecked(true);
+
+        checkBatteryLevel();
     }
 
+    private void checkBatteryLevel() {
+        IntentFilter ifilter = new IntentFilter(Intent.ACTION_BATTERY_CHANGED);
+        Intent batteryStatus = registerReceiver(null, ifilter);
+        if (batteryStatus != null) {
+            int level = batteryStatus.getIntExtra(BatteryManager.EXTRA_LEVEL, -1);
+            int scale = batteryStatus.getIntExtra(BatteryManager.EXTRA_SCALE, -1);
+            float batteryPct = level / (float) scale * 100;
 
+            if (batteryPct < 20) {
+                // Hiển thị thông báo "Pin yếu!"
+                AlertDialog.Builder builder = new AlertDialog.Builder(this);
+                builder.setTitle("Pin yếu!");
+                builder.setMessage("Pin của bạn đang yếu. Vui lòng sạc pin để tiếp tục sử dụng.");
+                builder.setIcon(R.drawable.baseline_battery_alert_24);
+                builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        dialog.dismiss();
+                    }
+                });
+                builder.setCancelable(false);
+                builder.show();
+            }
+        }
+    }
     @Override
     public boolean onNavigationItemSelected(@NonNull MenuItem item) {
         int id = item.getItemId();
@@ -78,13 +109,13 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 currentFragment = FRAGMENT_HOME;
             }
         }
-//        else if(id == R.id.nav_XemThongTin){
-//            if(currentFragment!=FRAGMENT_XEMTHONGTIN){
-//                replaceFragment(new XemThongTinFragment());
-//                setTitle("Xem thông tin chi tiết");
-//                currentFragment = FRAGMENT_XEMTHONGTIN;
-//            }
-//        }
+        else if(id == R.id.nav_DangXuat){
+            if(currentFragment!=FRAGMENT_DANGXUAT){
+                replaceFragment(new DangXuatFragment());
+                setTitle("Đăng xuất");
+                currentFragment = FRAGMENT_DANGXUAT;
+            }
+        }
         else if(id == R.id.nav_ThongKe){
             if(currentFragment!=FRAGMENT_THONGKE){
                 replaceFragment(new ThongKeFragment());
@@ -121,7 +152,14 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 setTitle("Đổi mật khẩu");
                 currentFragment = FRAGMENT_DOIMATKHAU;
             }
-        }else if(id == R.id.nav_DoiThongTinTaiKhoan){
+        }else if(id == R.id.nav_XemThongTinTraSach){
+            if(currentFragment!=FRAGMENT_XEMTHONGTIN){
+                replaceFragment(new XemThongTinTraSachFragment());
+                setTitle("Xem thông tin trả sách");
+                currentFragment = FRAGMENT_XEMTHONGTIN;
+            }
+        }
+        else if(id == R.id.nav_DoiThongTinTaiKhoan){
             if(currentFragment!=FRAGMENT_DOITTCANHAN){
                 replaceFragment(new DoiThongTinCaNhanFragment());
                 setTitle("Đổi thông tin cá nhân");

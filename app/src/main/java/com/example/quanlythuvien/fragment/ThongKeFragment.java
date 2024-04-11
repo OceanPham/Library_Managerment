@@ -1,6 +1,9 @@
 package com.example.quanlythuvien.fragment;
 
 import android.app.DatePickerDialog;
+import android.content.Intent;
+import android.database.Cursor;
+import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
@@ -18,6 +21,7 @@ import android.widget.Toast;
 import com.example.quanlythuvien.R;
 import com.example.quanlythuvien.dao.LoaiSachDAO;
 import com.example.quanlythuvien.dao.SachDAO;
+import com.example.quanlythuvien.database.DatabaseSingleton;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -30,6 +34,10 @@ public class ThongKeFragment extends Fragment {
     TextView txtTongSoSach, txtSoSachDangMuon, txtSoSachQuaHan, txtNgayBatDau, txtNgayKetThuc, txtSoLuongTheoThang;
     private SachDAO sachDAO;
     private SimpleDateFormat sdf;
+    SQLiteDatabase sqLiteDatabase = null;
+
+    Intent myIntent;
+
     Button btnThongKe;
     @Nullable
     @Override
@@ -38,7 +46,22 @@ public class ThongKeFragment extends Fragment {
          init(view);
         sachDAO = new SachDAO(getContext());
         sdf = new SimpleDateFormat("dd/MM/yyyy");
+        myIntent = getActivity().getIntent();
+        String data = "";
+        if (myIntent != null && myIntent.getExtras() != null) {
+            data = myIntent.getStringExtra("tenTaiKhoan");
+        }
 
+        sqLiteDatabase = DatabaseSingleton.getDatabase();
+        int maQuanLy = 0;
+        Cursor cursor = sqLiteDatabase.rawQuery("SELECT MaQuanLy FROM QuanLy where TenDangNhap =?", new String[]{data});
+        cursor.moveToFirst();
+        while (!cursor.isAfterLast()) {
+            maQuanLy = cursor.getInt(0);
+            cursor.moveToNext();
+        }
+
+        cursor.close();
         Calendar calendar = Calendar.getInstance();
         int year = calendar.get(Calendar.YEAR);
         int month = calendar.get(Calendar.MONTH);
@@ -48,10 +71,10 @@ public class ThongKeFragment extends Fragment {
          Date startDate = calendar.getTime();
          Date endDate = calendar.getTime();
         final Date[] startDateArray = {startDate, endDate};
-        int sosachmuontrongTime = sachDAO.countBorrowingBetweenDate(startDate, endDate);
+        int sosachmuontrongTime = sachDAO.countBorrowingBetweenDate(startDate, endDate, maQuanLy);
         int tongsoluong = sachDAO.countAll();
-        int sosachdangmuon = sachDAO.countBorrowing();
-        int sosachquahan = sachDAO.countOverDate();
+        int sosachdangmuon = sachDAO.countBorrowing(maQuanLy);
+        int sosachquahan = sachDAO.countOverDate(maQuanLy);
 
         txtNgayBatDau.setText(sdf.format(startDate));
         txtNgayKetThuc.setText(sdf.format(endDate));
@@ -98,11 +121,15 @@ public class ThongKeFragment extends Fragment {
             }
         });
 
+        int finalMaQuanLy = maQuanLy;
         btnThongKe.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                int sosachtrongTime = sachDAO.countBorrowingBetweenDate(startDateArray[0], startDateArray[1]);
+                int sosachtrongTime = sachDAO.countBorrowingBetweenDate(startDateArray[0], startDateArray[1], finalMaQuanLy);
                 txtSoLuongTheoThang.setText(sosachtrongTime+"");
+                if(sosachtrongTime==0){
+                    Toast.makeText(getContext(), "Bạn không mượn cuốn  sách nào trong khoảng thời gian này", Toast.LENGTH_LONG).show();
+                }
             }
         });
 

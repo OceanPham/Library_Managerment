@@ -48,30 +48,32 @@ public class SachDAO {
         return soluong;
     }
 
-    public int countBorrowing() {
+    public int countBorrowing(int maQuanLy) {
 //        String query = "SELECT COUNT(*) FROM MuonSach WHERE NgayTra IS NULL";
-        Cursor cursor = sqLiteDatabase.rawQuery("SELECT * FROM MuonSach WHERE NgayTra IS NULL", null);
+        Cursor cursor = sqLiteDatabase.rawQuery("SELECT Sum(SoLuong) FROM MuonSach WHERE TinhTrang =? AND MaQuanLy=?", new String[]{"Chưa trả", maQuanLy+""});
+       cursor.moveToFirst();
         int soluong;
-        soluong = cursor.getCount();
+        soluong = cursor.getInt(0);
         cursor.close();
         return soluong;
     }
 
-    public int countBorrowingBetweenDate(Date start, Date end) {
+    public int countBorrowingBetweenDate(Date start, Date end, int maQuanLy) {
         // Chuyển đổi thời gian bắt đầu và kết thúc thành định dạng chuỗi ngày "yyyy-MM-dd"
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
         String startDateString = sdf.format(start);
         String endDateString = sdf.format(end);
         // Truy vấn SQL để lấy số lượng sách được mượn trong khoảng thời gian
-        String query = "SELECT * FROM MuonSach WHERE NgayMuon BETWEEN ? AND ?";
-        String[] selectionArgs = { startDateString, endDateString };
+        String query = "SELECT Sum(SoLuong) FROM MuonSach WHERE NgayMuon BETWEEN ? AND ? AND MaQuanLy=?";
+        String[] selectionArgs = { startDateString, endDateString, maQuanLy+"" };
         Cursor cursor = sqLiteDatabase.rawQuery(query, selectionArgs);
-        int soluong = cursor.getCount();
+        cursor.moveToFirst() ;
+        int soluong = cursor.getInt(0);
         cursor.close();
         return soluong;
     }
 
-    public int countOverDate() {
+    public int countOverDate(int maQuanLy) {
         // Tính toán thời điểm 2 tháng trước
         Calendar calendar = Calendar.getInstance();
         calendar.add(Calendar.MONTH, -11);
@@ -80,7 +82,7 @@ public class SachDAO {
         SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
         String twoMonthsAgoStr = dateFormat.format(twoMonthsAgo);
 
-        Cursor cursor = sqLiteDatabase.rawQuery( "SELECT COUNT(*) FROM MuonSach WHERE NgayTra IS NULL AND NgayMuon < ?", new String[]{twoMonthsAgoStr});
+        Cursor cursor = sqLiteDatabase.rawQuery( "SELECT Sum(SoLuong) FROM MuonSach WHERE TinhTrang=? AND MaQuanLy=? AND NgayMuon < ?", new String[]{"Chưa trả", maQuanLy+"", twoMonthsAgoStr});
         int soluong = 0;
         if (cursor != null) {
             cursor.moveToFirst();

@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.app.Dialog;
 import android.content.ContentValues;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.graphics.Bitmap;
@@ -14,6 +15,7 @@ import android.os.Bundle;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.GridLayoutManager;
@@ -26,6 +28,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.Spinner;
@@ -53,6 +56,8 @@ public class QuyDinhFragment extends Fragment {
     private QuyDinhAdapter quyDinhAdapter;
     private static final int REQUEST_CODE_FOLDER = 123;
     Button btnThemQuyDinh;
+    EditText edtPhoneGiamDoc;
+    ImageView imgPhone, imgMess;
     ArrayList<QuyDinh> listQuyDinh;
     @Nullable
     @Override
@@ -75,6 +80,30 @@ public class QuyDinhFragment extends Fragment {
         recyclerViewQuyDinh.setAdapter(quyDinhAdapter); // Di chuyển vào đây
 
         btnThemQuyDinh = view.findViewById(R.id.btnAddQuyDinh);
+        edtPhoneGiamDoc = view.findViewById(R.id.edtPhoneGiamDoc);
+        imgMess = view.findViewById(R.id.imgMess);
+        imgPhone = view.findViewById(R.id.imgPhone);
+        edtPhoneGiamDoc.setText("0379003225");
+        imgPhone.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent  call_intent = new Intent(Intent.ACTION_CALL, Uri.parse("tel:"+edtPhoneGiamDoc.getText().toString()));
+                //Require Comfirm before call
+                if(ActivityCompat.checkSelfPermission(getContext(), android.Manifest.permission.CALL_PHONE)!= PackageManager.PERMISSION_GRANTED){
+                    ActivityCompat.requestPermissions(getActivity(), new String[]{android.Manifest.permission.CALL_PHONE}, 1);
+                    return;
+                }
+                startActivity(call_intent);
+            }
+        });
+
+        imgMess.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                    Intent SmsIntent = new Intent(Intent.ACTION_SENDTO, Uri.parse("smsto:"+edtPhoneGiamDoc.getText().toString()) );
+                    startActivity(SmsIntent);
+                }
+        });
         btnThemQuyDinh.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

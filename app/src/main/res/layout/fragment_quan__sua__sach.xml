@@ -39,11 +39,12 @@
 
                 <ImageButton
                     android:id="@+id/btnquaylaisua"
-                    android:layout_width="75dp"
-                    android:layout_height="wrap_content"
+                    android:layout_width="95dp"
+                    android:layout_height="60dp"
+                    android:scaleType="fitXY"
                     android:layout_marginTop="5dp"
                     android:background="@android:color/transparent"
-                    android:src="@drawable/quan_ic_quaylai_left_24"
+                    android:src="@drawable/backic"
                     android:text="Button"
                     app:backgroundTint="@null" />
 
