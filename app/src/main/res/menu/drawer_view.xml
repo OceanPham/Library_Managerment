@@ -24,8 +24,16 @@
             />
     </group>
 
-        <item android:title="Người dùng">
-            <menu>
+        <item android:title=""
+            android:enabled="false">
+            <menu >
+                <item
+                    android:id="@+id/nav"
+                    android:title="Người dùng"
+                    />
+            </menu>
+        </item>
+    <group android:checkableBehavior="single">
                 <item
                     android:id="@+id/nav_QuyDinh"
                     android:icon="@drawable/baseline_info_outline_24"
@@ -49,7 +57,7 @@
                         <item
                             android:id="@+id/nav_XemThongTinTraSach"
                             android:icon="@drawable/baseline_remove_red_eye_24"
-                            android:title="Xem thông tin trả sách"
+                            android:title="Xem mã trả sách"
                             />
 
                 <item
@@ -57,7 +65,6 @@
                     android:icon="@drawable/baseline_logout_24"
                     android:title="Đăng xuất"
                     />
-            </menu>
+                </group>
 
-        </item>
 </menu>

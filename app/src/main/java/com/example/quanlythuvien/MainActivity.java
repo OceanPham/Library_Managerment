@@ -168,7 +168,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             if(currentFragment!=FRAGMENT_XEMTHONGTIN){
                 if(ma == daoQuanLy.getMaQuanLy("Huy")){
                     replaceFragment(new XemThongTinTraSachFragment());
-                    setTitle("Xem thông tin trả sách");
+                    setTitle("Xem mã trả sách");
                     currentFragment = FRAGMENT_XEMTHONGTIN;
                 }
                 else {

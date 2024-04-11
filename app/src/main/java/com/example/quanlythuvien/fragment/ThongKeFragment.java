@@ -118,18 +118,25 @@ public class ThongKeFragment extends Fragment {
                     }
                 }, mYear, mMonth, mDay);
                 datePickerDialog.show();
+
             }
         });
-
         int finalMaQuanLy = maQuanLy;
+
+
         btnThongKe.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 int sosachtrongTime = sachDAO.countBorrowingBetweenDate(startDateArray[0], startDateArray[1], finalMaQuanLy);
-                txtSoLuongTheoThang.setText(sosachtrongTime+"");
-                if(sosachtrongTime==0){
-                    Toast.makeText(getContext(), "Bạn không mượn cuốn  sách nào trong khoảng thời gian này", Toast.LENGTH_LONG).show();
+                if(startDateArray[0].after(startDateArray[1])){
+                    Toast.makeText(getContext(), "Ngày bắt đầu phải nhỏ hơn ngày kết thúc", Toast.LENGTH_SHORT).show();
+                }else{
+                    txtSoLuongTheoThang.setText(sosachtrongTime+"");
+                    if(sosachtrongTime==0){
+                        Toast.makeText(getContext(), "Bạn không mượn cuốn  sách nào trong khoảng thời gian này", Toast.LENGTH_LONG).show();
+                    }
                 }
+
             }
         });
 
