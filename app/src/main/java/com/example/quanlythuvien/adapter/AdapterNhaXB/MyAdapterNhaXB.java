@@ -30,10 +30,8 @@ import androidx.fragment.app.FragmentTransaction;
 import com.example.quanlythuvien.R;
 import com.example.quanlythuvien.dao.DAONhaXB;
 import com.example.quanlythuvien.fragment.QuanLyNXBFragment;
-import com.example.quanlythuvien.fragment.Quan_Sua_SachFragment;
 
 import java.util.ArrayList;
-import java.util.List;
 
 public class MyAdapterNhaXB extends ArrayAdapter<NhaXB> {
     ArrayList<NhaXB> listnxb;

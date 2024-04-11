@@ -105,29 +105,78 @@ public class DAOSach {
 
 
     public long them_sach (Sach obj){
-        ContentValues values = new ContentValues();
-        values.put("TenSach", obj.getTenSach());
-        values.put("MaTheLoai", obj.getMaTheLoai());
-        values.put("TomTat", obj.getTomTat());
-        values.put("MaTacGia",obj.getMatacGia());
-        values.put("NgayXuatBan",obj.getNgayXuatBan());
-        values.put("MaNXB", obj.getManxb());
-        values.put("SoLuong", obj.getSoLuong());
-        values.put("Anh", obj.getHinhAnh());
-        return database.insert("Sach", null, values);
+        String sql = "select TenSach from Sach where MaTheLoai=? and MaTacGia=? and NgayXuatBan=? and MaNXB=?";
+        Cursor c = database.rawQuery(sql, new String[]{obj.getMaTheLoai()+"", obj.getMatacGia()+"", obj.getNgayXuatBan(), obj.getManxb()+""});
+        if(c != null && c.moveToFirst()){
+            String tensach = obj.getTenSach().toLowerCase().trim();
+            String tensachtrave = c.getString(0).toLowerCase().trim();
+            c.close();
+            if(tensach.equals(tensachtrave)){
+                return -2;
+            }
+            else{
+                ContentValues values = new ContentValues();
+                values.put("TenSach", obj.getTenSach());
+                values.put("MaTheLoai", obj.getMaTheLoai());
+                values.put("TomTat", obj.getTomTat());
+                values.put("MaTacGia",obj.getMatacGia());
+                values.put("NgayXuatBan",obj.getNgayXuatBan());
+                values.put("MaNXB", obj.getManxb());
+                values.put("SoLuong", obj.getSoLuong());
+                values.put("Anh", obj.getHinhAnh());
+                return database.insert("Sach", null, values);
+            }
+        }
+        else{
+            c.close();
+            ContentValues values = new ContentValues();
+            values.put("TenSach", obj.getTenSach());
+            values.put("MaTheLoai", obj.getMaTheLoai());
+            values.put("TomTat", obj.getTomTat());
+            values.put("MaTacGia",obj.getMatacGia());
+            values.put("NgayXuatBan",obj.getNgayXuatBan());
+            values.put("MaNXB", obj.getManxb());
+            values.put("SoLuong", obj.getSoLuong());
+            values.put("Anh", obj.getHinhAnh());
+            return database.insert("Sach", null, values);
+        }
     }
 
     public int sua_sach(Sach obj){
-        ContentValues values = new ContentValues();
-        values.put("TenSach", obj.getTenSach());
-        values.put("MaTheLoai", obj.getMaTheLoai());
-        values.put("TomTat", obj.getTomTat());
-        values.put("NgayXuatBan", obj.getNgayXuatBan());
-        values.put("MaTacGia",obj.getMatacGia());
-        values.put("MaNXB", obj.getManxb());
-        values.put("SoLuong", obj.getSoLuong());
-        values.put("Anh", obj.getHinhAnh());
-        return database.update("Sach",  values, "MaSach=?", new String[]{obj.getMaSach()+""});
+        String sql = "select TenSach from Sach where TenSach=? and MaTheLoai=? and MaTacGia=? and NgayXuatBan=? and MaNXB=?";
+        Cursor c = database.rawQuery(sql, new String[]{obj.getTenSach(),obj.getMaTheLoai()+"", obj.getMatacGia()+"", obj.getNgayXuatBan(), obj.getManxb()+""});
+        if(c != null && c.moveToFirst()){
+            String tensach = obj.getTenSach().toLowerCase().trim();
+            String tensachtrave = c.getString(0).toLowerCase().trim();
+            c.close();
+            if(tensach.equals(tensachtrave)){
+                return -2;
+            }
+            else{
+                ContentValues values = new ContentValues();
+                values.put("TenSach", obj.getTenSach());
+                values.put("MaTheLoai", obj.getMaTheLoai());
+                values.put("TomTat", obj.getTomTat());
+                values.put("NgayXuatBan", obj.getNgayXuatBan());
+                values.put("MaTacGia",obj.getMatacGia());
+                values.put("MaNXB", obj.getManxb());
+                values.put("SoLuong", obj.getSoLuong());
+                values.put("Anh", obj.getHinhAnh());
+                return database.update("Sach",  values, "MaSach=?", new String[]{obj.getMaSach()+""});
+            }
+        }
+        else{
+            ContentValues values = new ContentValues();
+            values.put("TenSach", obj.getTenSach());
+            values.put("MaTheLoai", obj.getMaTheLoai());
+            values.put("TomTat", obj.getTomTat());
+            values.put("NgayXuatBan", obj.getNgayXuatBan());
+            values.put("MaTacGia",obj.getMatacGia());
+            values.put("MaNXB", obj.getManxb());
+            values.put("SoLuong", obj.getSoLuong());
+            values.put("Anh", obj.getHinhAnh());
+            return database.update("Sach",  values, "MaSach=?", new String[]{obj.getMaSach()+""});
+        }
     }
 
     public int xoa_sach(int id){

@@ -17,7 +17,9 @@ import android.database.sqlite.SQLiteDatabase;
 import android.os.BatteryManager;
 import android.os.Bundle;
 import android.view.MenuItem;
+import android.widget.Toast;
 
+import com.example.quanlythuvien.dao.DAOQuanLy;
 import com.example.quanlythuvien.database.DatabaseSingleton;
 import com.example.quanlythuvien.fragment.DangXuatFragment;
 import com.example.quanlythuvien.fragment.DoiMatKhauFragment;
@@ -43,10 +45,19 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     private static final int FRAGMENT_DOITTCANHAN = 8;
     private static final int FRAGMENT_DANGXUAT= 9;
     private int currentFragment = FRAGMENT_HOME;
+    Intent myIntent;
+    String data="";
+    DAOQuanLy daoQuanLy;
+    int ma = 0;
     private DrawerLayout drawer;
     public  static SQLiteDatabase sqLiteDatabase = null;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        daoQuanLy = new DAOQuanLy(this);
+        myIntent = getIntent();
+        if (myIntent != null && myIntent.getExtras() != null) {
+            data = (myIntent.getStringExtra("tenTaiKhoan"));
+        }
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         sqLiteDatabase = openOrCreateDatabase("library_manager.db", MODE_PRIVATE, null);
@@ -102,6 +113,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     @Override
     public boolean onNavigationItemSelected(@NonNull MenuItem item) {
         int id = item.getItemId();
+        ma = daoQuanLy.getMaQuanLy(data);
         if(id==R.id.nav_Home){
             if(currentFragment!=FRAGMENT_HOME){
                 replaceFragment(new HomeFragment());
@@ -154,9 +166,15 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             }
         }else if(id == R.id.nav_XemThongTinTraSach){
             if(currentFragment!=FRAGMENT_XEMTHONGTIN){
-                replaceFragment(new XemThongTinTraSachFragment());
-                setTitle("Xem thông tin trả sách");
-                currentFragment = FRAGMENT_XEMTHONGTIN;
+                if(ma == daoQuanLy.getMaQuanLy("Huy")){
+                    replaceFragment(new XemThongTinTraSachFragment());
+                    setTitle("Xem thông tin trả sách");
+                    currentFragment = FRAGMENT_XEMTHONGTIN;
+                }
+                else {
+                    Toast.makeText(this, "Bạn không có chức năng này", Toast.LENGTH_SHORT).show();
+                }
+
             }
         }
         else if(id == R.id.nav_DoiThongTinTaiKhoan){

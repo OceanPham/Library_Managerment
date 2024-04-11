@@ -60,11 +60,6 @@ public class QuanLyNXBFragment extends Fragment {
         });
         return v;
     }
-    public void reloadData() {
-        listnhaxb.clear();
-        listnhaxb.addAll(daoNhaXB.getAllNhaXB());
-        myAdapterNhaXB.notifyDataSetChanged();
-    }
 
     private void OpenFeedback() {
         final Dialog dialog = new Dialog(getContext());

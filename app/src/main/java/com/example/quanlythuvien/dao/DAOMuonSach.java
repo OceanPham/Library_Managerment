@@ -16,9 +16,11 @@ import java.util.List;
 
 public class DAOMuonSach {
     private SQLiteDatabase database;
+    DAOSach daoSach;
     public DAOMuonSach(Context ct){
         DB db = new DB(ct);
         database = db.getWritableDatabase();
+        daoSach = new DAOSach(ct);
     }
 
     public int getTinhTrangMuon(int mamuonsach){
@@ -105,11 +107,11 @@ public class DAOMuonSach {
     }
 
 
-    public String getMaMuonSach(String maquanly, String tensach, String ngaymuon, int soluong){
+    public String getMaMuonSach(int maquanly, String tensach, String ngaymuon){
         String ma="";
         String masach = getmasach(tensach);
-        String sql = "select MaMuonSach from MuonSach where MaQuanLy=? and MaSach=? and NgayMuon=? and SoLuong=? and TinhTrang=?";
-        Cursor c = database.rawQuery(sql, new String[]{maquanly,masach,ngaymuon,soluong+"","Chưa trả"});
+        String sql = "select MaMuonSach from MuonSach where MaQuanLy=? and MaSach=? and NgayMuon=? and TinhTrang=?";
+        Cursor c = database.rawQuery(sql, new String[]{maquanly+"",masach,ngaymuon,"Chưa trả"});
         if (c != null && c.moveToFirst()) {
 
             ma = c.getString(0);
@@ -121,7 +123,7 @@ public class DAOMuonSach {
     public List<MuonSach> getAllSachMuon(int maquanly){
         List<MuonSach> list = new ArrayList<>();
         String sql = "select * from MuonSach where MaQuanLy=?";
-        Cursor c = database.rawQuery(sql, new String[]{String.valueOf(maquanly)});
+        Cursor c = database.rawQuery(sql, new String[]{maquanly+""});
         if(c == null){
             return list = null;
         }
@@ -134,12 +136,37 @@ public class DAOMuonSach {
             obj.setNgaytra(c.getString(4));
             obj.setTinhtrang(c.getString(5));
             obj.setPhuphi(c.getInt(6));
+            obj.setSoluong(c.getInt(7));
             list.add(obj);
         }
         return list;
     }
 
-    public int update_trasach(String maquanly,String tensach, String ngaymuon, int soluong, String ngaytra){
+    public ArrayList<MuonSach> getTatCaSachMuon(){
+        ArrayList<MuonSach> list = new ArrayList<>();
+        String sql = "select * from MuonSach where TinhTrang=?";
+        Cursor c = database.rawQuery(sql, new String[]{"Chưa trả"});
+        if(c == null){
+            c.close();
+            return list;
+        }
+        while (c.moveToNext()){
+            MuonSach obj = new MuonSach();
+            obj.setMamuonsach(Integer.parseInt(c.getString(0)));
+            obj.setMaquanly(Integer.parseInt(c.getString(1)));
+            obj.setMasach(c.getInt(2));
+            obj.setNgaymuon(c.getString(3));
+            obj.setNgaytra(c.getString(4));
+            obj.setTinhtrang(c.getString(5));
+            obj.setPhuphi(c.getInt(6));
+            obj.setSoluong(c.getInt(7));
+            list.add(obj);
+        }
+        c.close();
+        return list;
+    }
+
+    public int update_trasach(int maquanly,String tensach, String ngaymuon, int soluong, String ngaytra){
         long phuphi=0;
         Date ngaymuonsach = stringtoDate(ngaymuon);
         Date ngaytrasach = stringtoDate(ngaytra);
@@ -156,14 +183,43 @@ public class DAOMuonSach {
             long quahan = songay - 30;
             phuphi = quahan*10000;
         }
-        String mamuonsach = getMaMuonSach(maquanly,tensach, ngaymuon,soluong);
-        ContentValues values = new ContentValues();
-        values.put("NgayTra", ngaytra);
-        values.put("TinhTrang", "Đã trả");
-        values.put("PhuPhi", phuphi);
-        return database.update("MuonSach",values,"MaMuonSach=?", new String[]{mamuonsach});
+        if(getSLmuontheosachDeTra(maquanly,tensach, ngaymuon)==soluong){
+            String mamuonsach = getMaMuonSach(maquanly,tensach, ngaymuon);
+            ContentValues values = new ContentValues();
+            values.put("NgayTra", ngaytra);
+            values.put("TinhTrang", "Đã trả");
+            values.put("PhuPhi", phuphi);
+            return database.update("MuonSach",values,"MaMuonSach=?", new String[]{mamuonsach});
+        }
+        else{
+            String mamuonsach = getMaMuonSach(maquanly,tensach, ngaymuon);
+            ContentValues values = new ContentValues();
+            values.put("SoLuong",getSLmuontheosachDeTra(maquanly,tensach, ngaymuon)-soluong);
+            database.update("MuonSach",values,"MaMuonSach=?", new String[]{mamuonsach});
+            ContentValues valuesthem = new ContentValues();
+            valuesthem.put("MaQuanLy",maquanly);
+            valuesthem.put("MaSach",daoSach.getMaSach(tensach));
+            valuesthem.put("NgayMuon",ngaymuon);
+            valuesthem.put("NgayTra",ngaytra);
+            valuesthem.put("TinhTrang","Đã trả");
+            valuesthem.put("PhuPhi",phuphi);
+            valuesthem.put("SoLuong",soluong);
+            database.insert("MuonSach",null,valuesthem);
+            return 1;
+        }
     }
+    public int getSLmuontheosachDeTra(int maquanly, String tensach, String ngaymuon){
+        int sl=0;
+        String masach = getmasach(tensach);
+        String sql = "select SoLuong from MuonSach where MaQuanLy=? and MaSach=? and NgayMuon=? and TinhTrang=?";
+        Cursor c = database.rawQuery(sql, new String[]{maquanly+"",masach,ngaymuon,"Chưa trả"});
+        if (c != null && c.moveToFirst()) {
+            sl = c.getInt(0);
+            c.close();
+        }
+        return sl;
 
+    }
     public int getSoSachMuonTheoSach(int mamuonsach){
         int sl =0;
         String sql = "select SoLuong from MuonSach where MaMuonSach=? group by MaMuonSach";

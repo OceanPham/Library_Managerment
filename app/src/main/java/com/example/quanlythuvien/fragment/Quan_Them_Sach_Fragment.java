@@ -176,7 +176,7 @@ public class Quan_Them_Sach_Fragment extends Fragment {
                             hinhanh
                     );
                     long id = daoSach.them_sach(obj);
-                    if(id != -1){
+                    if(id != -1) {
                         showDialogNotiSuccess("Thêm sách thành công");
                         HomeFragment fragment = new HomeFragment();
                         getActivity().getSupportFragmentManager().beginTransaction()
@@ -185,7 +185,7 @@ public class Quan_Them_Sach_Fragment extends Fragment {
                                 .commit();
                     }
                     else{
-                        showDialogNotiFail("Vui lòng kiểm tra lại thông tin");
+                        showDialogNotiFail("Sách đã bị trùng");
                     }
 
                 }

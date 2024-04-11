@@ -21,6 +21,18 @@
             android:textSize="30sp"
             android:textColor="@color/black"
             android:text="Nhập mã mượn sách"/>
+        <TextView
+            android:background="@color/white"
+            android:id="@+id/txtthongtinmuon"
+            android:layout_marginTop="50dp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:textStyle="bold"
+            android:padding="5dp"
+            android:textSize="20sp"
+            android:textColor="@color/black"
+            android:text="Bạn đang mượn 5 quyển sách Cấu trúc dữ liệu và giải thuật"/>
 
         <EditText
             android:id="@+id/edtnhapmatrasach"
@@ -32,6 +44,18 @@
             android:gravity="center"
             android:inputType="number"
             android:hint="Nhập mã mượn sách"
+            android:textColor="@color/black"
+            android:textSize="20sp" />
+        <EditText
+            android:id="@+id/edtnhapsltrasach"
+            android:layout_width="330dp"
+            android:layout_height="55dp"
+            android:layout_gravity="center"
+            android:layout_marginTop="30dp"
+            android:background="@drawable/quan_txt_timkiem_sach"
+            android:gravity="center"
+            android:inputType="number"
+            android:hint="Nhập số lượng muốn trả"
             android:textColor="@color/black"
             android:textSize="20sp" />
 
