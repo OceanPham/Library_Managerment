@@ -1,5 +1,6 @@
 package com.example.quanlythuvien.fragment;
 import android.app.Dialog;
+import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Color;
@@ -26,6 +27,7 @@ import android.widget.TextView;
 import com.example.quanlythuvien.R;
 import com.example.quanlythuvien.adapter.AdapterMuonSach.MuonSach;
 import com.example.quanlythuvien.dao.DAOMuonSach;
+import com.example.quanlythuvien.dao.DAOQuanLy;
 import com.example.quanlythuvien.dao.DAOSach;
 
 import java.text.SimpleDateFormat;
@@ -33,6 +35,10 @@ import java.util.Date;
 
 public class Quan_Xem_tt_SachFragment extends Fragment {
     ImageView img;
+    Intent myIntent;
+    String data="";
+    DAOQuanLy daoQuanLy;
+    int ma = 0;
     ImageButton btnquaylai, btnxoa,btnsua;
     Button btnmuon;
     DAOMuonSach daoMuonSach;
@@ -43,6 +49,12 @@ public class Quan_Xem_tt_SachFragment extends Fragment {
                              Bundle savedInstanceState) {
         View v = inflater.inflate(R.layout.fragment_quan__xem_tt__sach, container, false);
         anhxa(v);
+        myIntent = getActivity().getIntent();
+
+        if (myIntent != null && myIntent.getExtras() != null) {
+            data = (myIntent.getStringExtra("tenTaiKhoan"));
+        }
+        ma = daoQuanLy.getMaQuanLy(data);
         Bundle nhan = getArguments();
 
         byte[] hinhanh = nhan.getByteArray("anh");
@@ -113,7 +125,7 @@ public class Quan_Xem_tt_SachFragment extends Fragment {
             @Override
             public void onClick(View view) {
                 if (sosachconlai > 0) {
-                    OpenFeedbackMuon(txttensach.getText().toString(),tentacgia,sosachconlai,nhan.getInt("soluong"));
+                    OpenFeedbackMuon(ma,txttensach.getText().toString(),tentacgia,sosachconlai,nhan.getInt("soluong"));
                 }
                 else{
                     showDialogNotiFail("Số lượng sách còn lại trong kho không đủ. Mong bạn thông cảm");
@@ -126,7 +138,7 @@ public class Quan_Xem_tt_SachFragment extends Fragment {
     }
 
 
-    private void OpenFeedbackMuon(String ts, String tg, int sosachconlai, int soluong){
+    private void OpenFeedbackMuon(int matk,String ts, String tg, int sosachconlai, int soluong){
         final Dialog dialog = new Dialog(getContext());
         dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
         dialog.setContentView(R.layout.quan_layout_dialog_muon_sach);
@@ -175,7 +187,7 @@ public class Quan_Xem_tt_SachFragment extends Fragment {
                     int masach = Integer.parseInt(daoMuonSach.getmasach(txttens.getText().toString()));
                     String ngaymuon= txtngaymuon.getText().toString();
                     MuonSach obj = new MuonSach(
-                            3,
+                            matk,
                             masach,
                             ngaymuon,
                             "",
@@ -186,9 +198,14 @@ public class Quan_Xem_tt_SachFragment extends Fragment {
                     if(daoMuonSach.insert_muonsach(obj) > 0){
                         showDialogNotiSuccess("Mượn sách thành công");
                         dialog.dismiss();
-                        txtslsachdangmuon.setText("Số sách đang được mượn: "+daoMuonSach.getSoSachdangmuon(daoSach.getMaSach(txttensach.getText().toString())));
+                        txtslsachdangmuon.setText(daoMuonSach.getSoSachdangmuon(daoSach.getMaSach(txttensach.getText().toString()))+"");
                         int sosachconlai = soluong - daoMuonSach.getSoSachdangmuon(daoSach.getMaSach(txttensach.getText().toString()));
-                        txtsosachcon.setText("Số sách còn lại: "+sosachconlai);
+                        txtsosachcon.setText(sosachconlai+"");
+                        HomeFragment fragment = new HomeFragment();
+                        getActivity().getSupportFragmentManager().beginTransaction()
+                                .replace(R.id.content_frame, fragment)
+                                .addToBackStack(null)
+                                .commit();
                     }
                     else {
                         showDialogNotiFail("Mượn sách thất bại. Vui lòng kiểm tra lại");
@@ -326,5 +343,6 @@ public class Quan_Xem_tt_SachFragment extends Fragment {
         btnxoa = v.findViewById(R.id.btnxoasach);
         btnmuon = v.findViewById(R.id.btnmuonsach);
         daoMuonSach = new DAOMuonSach(v.getContext());
+        daoQuanLy = new DAOQuanLy(v.getContext());
     }
 }

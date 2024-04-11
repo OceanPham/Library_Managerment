@@ -1,6 +1,7 @@
 package com.example.quanlythuvien.fragment;
 
 import android.app.Dialog;
+import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
@@ -22,13 +23,20 @@ import android.widget.Toast;
 
 import com.example.quanlythuvien.R;
 import com.example.quanlythuvien.dao.DAOMuonSach;
+import com.example.quanlythuvien.dao.DAOQuanLy;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
 public class QuanTraSachFragment extends Fragment {
     Button btnxacnhantra;
+    Intent myIntent;
+    TextView txtthongtin;
+    EditText edtsl;
     EditText edtnhapma;
+    DAOQuanLy daoQuanLy;
+    String data="";
+    int ma = 0;
     DAOMuonSach daoMuonSach;
     Date currentDate = new Date();
     SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
@@ -40,32 +48,51 @@ public class QuanTraSachFragment extends Fragment {
         Bundle bundlenhan = getArguments();
         int manhan = bundlenhan.getInt("mamuon");
         anhXa(v);
+        int slmuon = bundlenhan.getInt("soluongmuon",0);
+        String tensach = bundlenhan.getString("tensach");
+        txtthongtin.setText("Bạn đang mượn "+slmuon+" quyển sách "+tensach);
+        myIntent = getActivity().getIntent();
+
+        if (myIntent != null && myIntent.getExtras() != null) {
+            data = (myIntent.getStringExtra("tenTaiKhoan"));
+        }
+        ma = daoQuanLy.getMaQuanLy(data);
         btnxacnhantra.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                String ma = edtnhapma.getText().toString().trim();
-
-                if (ma.isEmpty()) {
+                String matrasach = edtnhapma.getText().toString().trim();
+                String sltra = edtsl.getText().toString().trim();
+                if (matrasach.isEmpty()) {
+                    showDialogNotiFail("Vui lòng nhập mã để trả sách");
+                }
+                else if (sltra.isEmpty()) {
                     showDialogNotiFail("Vui lòng nhập mã để trả sách");
                 }
                 else {
-                    int manhantra = Integer.parseInt(ma);
-                    if (manhantra == manhan) {
-                        if(daoMuonSach.update_trasach("3",bundlenhan.getString("tensach"), bundlenhan.getString("ngaymuon"),bundlenhan.getInt("soluongmuon"),formattedDate)>0){
-                            showDialogNotiSuccess("Trả sách thành công");
-                            HomeFragment fragment = new HomeFragment();
-                            getActivity().getSupportFragmentManager().beginTransaction()
-                                    .replace(R.id.content_frame, fragment)
-                                    .addToBackStack(null)
-                                    .commit();
-                        }
-                        else {
-                            showDialogNotiSuccess("Trả sách thất bại. Vui lòng kiểm tra lại thông tin");
-                        }
+                    int manhantra = Integer.parseInt(matrasach);
+                    int sluongtra = Integer.parseInt(sltra);
+                    if(sluongtra > slmuon){
+                        showDialogNotiFail("Số lượng trả không hợp lệ");
                     }
                     else{
-                        showDialogNotiFail("Bạn nhập sai mã trả sách");
+                        if (manhantra == manhan) {
+                            if(daoMuonSach.update_trasach(ma,bundlenhan.getString("tensach"), bundlenhan.getString("ngaymuon"),sluongtra,formattedDate)>0){
+                                showDialogNotiSuccess("Trả sách thành công");
+                                HomeFragment fragment = new HomeFragment();
+                                getActivity().getSupportFragmentManager().beginTransaction()
+                                        .replace(R.id.content_frame, fragment)
+                                        .addToBackStack(null)
+                                        .commit();
+                            }
+                            else {
+                                showDialogNotiSuccess("Trả sách thất bại. Vui lòng kiểm tra lại thông tin");
+                            }
+                        }
+                        else{
+                            showDialogNotiFail("Bạn nhập sai mã trả sách");
+                        }
                     }
+
                 }
             }
         });
@@ -144,5 +171,8 @@ public class QuanTraSachFragment extends Fragment {
         btnxacnhantra = v.findViewById(R.id.btnxacnhantrasach);
         edtnhapma = v.findViewById(R.id.edtnhapmatrasach);
         daoMuonSach = new DAOMuonSach(v.getContext());
+        daoQuanLy = new DAOQuanLy(v.getContext());
+        txtthongtin = v.findViewById(R.id.txtthongtinmuon);
+        edtsl = v.findViewById(R.id.edtnhapsltrasach);
     }
 }

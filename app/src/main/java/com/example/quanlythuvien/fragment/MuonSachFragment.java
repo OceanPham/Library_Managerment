@@ -1,5 +1,6 @@
 package com.example.quanlythuvien.fragment;
 
+import android.content.Intent;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
@@ -17,6 +18,7 @@ import com.example.quanlythuvien.R;
 import com.example.quanlythuvien.adapter.AdapterMuonSach.MuonSach;
 import com.example.quanlythuvien.adapter.AdapterMuonSach.MyAdapterMuonSach;
 import com.example.quanlythuvien.dao.DAOMuonSach;
+import com.example.quanlythuvien.dao.DAOQuanLy;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -24,30 +26,39 @@ import java.util.List;
 public class MuonSachFragment extends Fragment {
     TextView txtsoluongdamuon, txtsoluongdangmuon, txtsoluongquahan, txttienphat;
     RecyclerView recyclerView;
+    Intent myIntent;
     MyAdapterMuonSach adapter;
+    String data="";
+    int ma = 0;
+    DAOQuanLy daoQuanLy;
     DAOMuonSach daoMuonSach;
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View v = inflater.inflate(R.layout.fragment_muon_sach, container, false);
         anhXa(v);
-        daoMuonSach = new DAOMuonSach(getContext());
-        daoMuonSach = new DAOMuonSach(getContext());
+        myIntent = getActivity().getIntent();
+
+        if (myIntent != null && myIntent.getExtras() != null) {
+            data = (myIntent.getStringExtra("tenTaiKhoan"));
+        }
+
+        ma = daoQuanLy.getMaQuanLy(data);
         LinearLayoutManager liner = new LinearLayoutManager(v.getContext());
         recyclerView.setLayoutManager(liner);
         adapter = new MyAdapterMuonSach(v.getContext());
         adapter.setData(getData());
         recyclerView.setAdapter(adapter);
-        txtsoluongdamuon.setText(daoMuonSach.getsosachdamuon(3)+"");
-        txtsoluongdangmuon.setText(daoMuonSach.getsosachdangmuon(3)+"");
-        txtsoluongquahan.setText(daoMuonSach.getsosachquahan(3)+"");
-        txttienphat.setText((daoMuonSach.getsosachquahan(3)*10000)+"");
+        txtsoluongdamuon.setText(daoMuonSach.getsosachdamuon(ma)+"");
+        txtsoluongdangmuon.setText(daoMuonSach.getsosachdangmuon(ma)+"");
+        txtsoluongquahan.setText(daoMuonSach.getsosachquahan(ma)+"");
+        txttienphat.setText((daoMuonSach.getsosachquahan(ma)*10000)+"");
         return v;
     }
 
     private List<MuonSach> getData() {
         List<MuonSach> listmuon = new ArrayList<>();
-        listmuon = daoMuonSach.getAllSachMuon(3);
+        listmuon = daoMuonSach.getAllSachMuon(ma);
         return listmuon;
     }
 
@@ -58,5 +69,7 @@ public class MuonSachFragment extends Fragment {
         txttienphat = v.findViewById(R.id.edtsotienphaitra);
         txtsoluongdangmuon = v.findViewById(R.id.edtsodangmuon);
         recyclerView = v.findViewById(R.id.recycleviewsachmuon);
+        daoMuonSach = new DAOMuonSach(getContext());
+        daoQuanLy = new DAOQuanLy(getContext());
     }
 }

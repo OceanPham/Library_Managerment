@@ -102,20 +102,20 @@
                 </com.google.android.material.textfield.TextInputLayout>
 
 
-<!--                <EditText-->
-<!--                    android:id="@+id/edtPassword"-->
-<!--                    android:layout_width="match_parent"-->
-<!--                    android:layout_height="50dp"-->
-<!--                    android:layout_marginTop="8dp"-->
-<!--                    android:background="@drawable/background_edt"-->
-<!--                    android:ems="10"-->
-<!--                    android:gravity="center"-->
-<!--                    android:hint="Enter Your Password"-->
-<!--                    android:inputType="textPassword"-->
-<!--                    android:textAlignment="center"-->
-<!--                    android:textColor="#707070"-->
-<!--                    android:textColorHint="#707070"-->
-<!--                    android:textSize="16sp" />-->
+                <!--                <EditText-->
+                <!--                    android:id="@+id/edtPassword"-->
+                <!--                    android:layout_width="match_parent"-->
+                <!--                    android:layout_height="50dp"-->
+                <!--                    android:layout_marginTop="8dp"-->
+                <!--                    android:background="@drawable/background_edt"-->
+                <!--                    android:ems="10"-->
+                <!--                    android:gravity="center"-->
+                <!--                    android:hint="Enter Your Password"-->
+                <!--                    android:inputType="textPassword"-->
+                <!--                    android:textAlignment="center"-->
+                <!--                    android:textColor="#707070"-->
+                <!--                    android:textColorHint="#707070"-->
+                <!--                    android:textSize="16sp" />-->
 
                 <Button
                     android:id="@+id/btnLogIn"
