@@ -12,7 +12,7 @@
         android:layout_marginTop="10dp"
         android:id="@+id/imageView7"
         android:layout_width="match_parent"
-        android:layout_height="200dp"
+        android:layout_height="120dp"
         android:src="@drawable/logo" />
 
     <TextView
@@ -22,7 +22,7 @@
         android:layout_gravity="center"
         android:gravity="center"
         android:text="Z Library"
-        android:textColor="#E60909"
+        android:textColor="#0C4BCC"
         android:textSize="50dp"
         android:textStyle="bold" />
 
@@ -35,6 +35,8 @@
             android:id="@+id/button"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            app:backgroundTint="@null"
+
             android:background="#0CD320"
             android:layout_weight="1"
             android:textStyle="bold"
@@ -44,6 +46,7 @@
         <Button
             android:id="@+id/button2"
             android:layout_width="wrap_content"
+            app:backgroundTint="@null"
             android:layout_height="wrap_content"
             android:background="#FFEB3B"
             android:layout_weight="1"
@@ -82,6 +85,7 @@
         android:layout_height="wrap_content"
         android:textColor="@color/white"
         android:textStyle="bold"
+        app:backgroundTint="@null"
         android:textSize="25dp"
         android:text="Sửa" />
 
